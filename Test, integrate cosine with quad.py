@@ -1,4 +1,4 @@
-#in this file we will numerically integrate the cosine function, and define the simpson rule ourselves
+#in this file we will numerically integrate the cosine function, using the predefined scipy.integrate.quad function
 
 import numpy as np
 from datetime import datetime
