@@ -2,16 +2,14 @@
 
 import numpy as np
 from datetime import datetime
+from scipy.integrate import simpson
 
 start_time = datetime.now()
 
 def integral(n,a,b,integrand):
-    dx = (b-a)/n
     x = np.linspace(a,b,n+1)
-    value = 0
-    for i in range(1,int(n/2+1)):
-        value += integrand(x[2*i-2]) + 4 * integrand(x[2*i-1]) + integrand(x[2*i])
-    value = 1/3 * dx * value
+    y = integrand(x)
+    value = simpson(y, x=x)
     return value
 
 def function(x):
@@ -20,10 +18,11 @@ def function(x):
 n = 100
 a = 0
 b = 10
-
-print(f"Numeric: {integral(n, a, b, function)}")
-print(f"Analytic: {np.sin(b)-np.sin(a)}")
-print(f"Error: {np.abs(integral(n, a, b, function) - np.sin(b)-np.sin(a))}")
+numeric_integral = integral(n, a, b, function)
 
 end_time = datetime.now()
+
+print(f"Numeric: {numeric_integral}")
+print(f"Analytic: {np.sin(b)-np.sin(a)}")
+print(f"Error: {np.abs(integral(n, a, b, function) - np.sin(b)-np.sin(a))}")
 print(f"Duration: {end_time - start_time}")
