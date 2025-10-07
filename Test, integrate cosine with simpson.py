@@ -7,7 +7,7 @@ from scipy.integrate import simpson
 start_time = datetime.now()
 
 def integral(n,a,b,integrand):
-    x = np.linspace(a,b,n+1)
+    x = np.linspace(a,b,n)
     y = integrand(x)
     value = simpson(y, x=x)
     return value
@@ -15,7 +15,7 @@ def integral(n,a,b,integrand):
 def function(x):
     return np.cos(x)
 
-n = 100
+n = 10000
 a = 0
 b = 10
 numeric_integral = integral(n, a, b, function)

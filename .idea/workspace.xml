@@ -5,9 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="10b6086c-8363-4c48-b335-76ff6dbf0ef9" name="Changes" comment="compare time from my own code with the scipy simpson function and quad function">
-      <change afterPath="$PROJECT_DIR$/2D cos method numerically.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Test, integrate cosine with quad.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test, integrate cosine with quad.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D cos method numerically.py" beforeDir="false" afterPath="$PROJECT_DIR$/1D cos method numerically.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Test, integrate cosine with simpson.py" beforeDir="false" afterPath="$PROJECT_DIR$/Test, integrate cosine with simpson.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -48,12 +47,14 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "Python.1D cos method numerically.executor": "Run",
     "Python.2D cos method numerically.executor": "Run",
     "Python.Test, integrate cosine with library.executor": "Run",
     "Python.Test, integrate cosine with quad.executor": "Run",
     "Python.Test, integrate cosine with simpson.executor": "Run",
     "Python.Test, integrate cosine without existing functions.executor": "Run",
     "Python.Test, integrate cosine without library.executor": "Run",
+    "Python.code emma.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
@@ -88,7 +89,8 @@
       <workItem from="1759332606280" duration="549000" />
       <workItem from="1759333177283" duration="5605000" />
       <workItem from="1759340159368" duration="2393000" />
-      <workItem from="1759499146581" duration="2753000" />
+      <workItem from="1759499146581" duration="2770000" />
+      <workItem from="1759826361895" duration="15961000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -154,7 +156,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759499279569</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="compare time from my own code with the scipy simpson function and quad function">
+      <option name="closed" value="true" />
+      <created>1759506601375</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1759506601375</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -191,11 +201,13 @@
     <option name="LAST_COMMIT_MESSAGE" value="compare time from my own code with the scipy simpson function and quad function" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_simpson.coverage" NAME="Test, integrate cosine with simpson Coverage Results" MODIFIED="1759340670913" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$code_emma.coverage" NAME="code emma Coverage Results" MODIFIED="1759855419659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_simpson.coverage" NAME="Test, integrate cosine with simpson Coverage Results" MODIFIED="1759853767546" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_quad.coverage" NAME="Test, integrate cosine with quad Coverage Results" MODIFIED="1759340780185" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$1D_cos_method_numerically.coverage" NAME="1D cos method numerically Coverage Results" MODIFIED="1759855403530" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$2D_cos_method_numerically.coverage" NAME="2D cos method numerically Coverage Results" MODIFIED="1759500856069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_library.coverage" NAME="Test, integrate cosine without library Coverage Results" MODIFIED="1759338488079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_existing_functions.coverage" NAME="Test, integrate cosine without existing functions Coverage Results" MODIFIED="1759340659131" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_existing_functions.coverage" NAME="Test, integrate cosine without existing functions Coverage Results" MODIFIED="1759847336113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_library.coverage" NAME="Test, integrate cosine with library Coverage Results" MODIFIED="1759338454807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>
