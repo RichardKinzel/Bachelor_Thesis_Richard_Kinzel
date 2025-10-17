@@ -8,11 +8,11 @@ from datetime import datetime
 # Here we choose the way of numeric integration.
 def integral(lower_limit,upper_limit,integrand,n):
     #using scipy.integrade.quad:
-    #integral_value = quad(integrand, lower_limit, upper_limit)[0]
+    integral_value = quad(integrand, lower_limit, upper_limit)[0]
 
     #using scipy.integrate.simpson:
-    x_values = np.linspace(lower_limit,upper_limit,n)
-    integral_value = simpson(integrand(x_values), x=x_values)
+    # x_values = np.linspace(lower_limit,upper_limit,n)
+    # integral_value = simpson(integrand(x_values), x=x_values)
     return integral_value
 
 # Here we define the payoff function of an option at time T, depending on what type of option contract we use.
@@ -30,13 +30,22 @@ def characteristic_function(u,t,sigma,r):
 
     return characteristic_value
 
+# This is the conditional characteristic function
 def phi(u,X_0,T,sigma,r):
     return np.exp(1j*u*X_0)*characteristic_function(u,T,sigma,r)
 
+# cosine Fourier coefficients of payoff function
 def H(k,a,b,K,n,option_type):
-    integrand = lambda y: V_T(y,K,option_type) * np.cos(k * np.pi * (y-a)/(b-a))
-    return 2/(b-a) * integral(a,b,integrand,n)
+    integrand = lambda y: V_T(y, K, option_type) * np.cos(k * np.pi * (y - a) / (b - a))
+    if option_type == 'call':
+        #note that V_T(y)=0 if y<0, so we replace our lower integration limit with 0, assuming a<0 and b>0.
+        H_value = 2/(b-a) * integral(0,b,integrand,n)
+    elif option_type == 'put':
+        # note that V_T(y)=0 if y>0, so we replace our upper integration limit with 0, assuming a<0 and b>0.
+        H_value = 2/(b-a) * integral(a,0,integrand,n)
+    return H_value
 
+# This is our main calculation. In in we use the functions defined above
 def COS_formule(N,T,t_0,K,S_0,sigma,r,L,n,option_type):
     a = -L * np.sqrt(T)
     b = L * np.sqrt(T)
@@ -44,6 +53,7 @@ def COS_formule(N,T,t_0,K,S_0,sigma,r,L,n,option_type):
     somterm = lambda k:( phi(k*np.pi/(b-a),X_0,T,sigma,r) * np.exp(-1j*k*np.pi*a/(b-a)) ).real * H(k,a,b,K,n,option_type)
     return np.exp(-r * (T-t_0)) * (0.5*somterm(0) + sum(somterm(k) for k in range(1,N)))
 
+# In order to check the accuracy of our numeric approximation, we also calculate the option value analytically using Black Scholes.
 def Black_Scholes(option_type,S_0,K,sigma,T,t_0,r):
     d1 = 1/(sigma*np.sqrt(T-t_0)) * (np.log(S_0/K) + (r + 0.5 * sigma**2) * (T-t_0))
     d2 = d1 - sigma * np.sqrt(T - t_0)
@@ -53,7 +63,9 @@ def Black_Scholes(option_type,S_0,K,sigma,T,t_0,r):
         value = st.norm.cdf(-d2) * K * np.exp(-r * (T-t_0)) - st.norm.cdf(-d1) * S_0
     return value
 
-N = 128
+# Values for all variables used
+N = 256 #scipy.integrate.quad seems to have some issues for N=256 using T=0.1. I suggest to use simpson rule, or change either N to 128 or T to a higher value, 10 for example.
+        # I tried manually setting integration limits so I could eliminate the maximum function in the integrand, but this didn't fix the issue.
 T = 0.1
 t_0 = 0
 K = 120
@@ -61,8 +73,8 @@ S_0 = 100
 sigma = 0.25
 r = 0.1
 L = 8
-option_type = 'put'
-n = 10000
+option_type = 'call'
+n = 10000   #represents number of subintervals for integrating numerically, only relevant if using simpson rule. scipy.integrate.quad evaluates these subintervals autimatically.
 
 start_time = datetime.now()
 numeric_valuation = COS_formule(N, T, t_0, K, S_0, sigma, r, L, n, option_type)

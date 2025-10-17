@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10b6086c-8363-4c48-b335-76ff6dbf0ef9" name="Changes" comment="1D cos methode, werkt nog niet">
-      <change afterPath="$PROJECT_DIR$/2D cos method numerically.py" afterDir="false" />
+    <list default="true" id="10b6086c-8363-4c48-b335-76ff6dbf0ef9" name="Changes" comment="1D cos methode af">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1D cos method numerically.py" beforeDir="false" afterPath="$PROJECT_DIR$/1D cos method numerically.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/code emma 1D COS methode.py" beforeDir="false" afterPath="$PROJECT_DIR$/code emma 1D COS methode.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/2D cos method numerically.py" beforeDir="false" afterPath="$PROJECT_DIR$/2D cos method numerically.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,7 +95,7 @@
       <workItem from="1759826361895" duration="16022000" />
       <workItem from="1760528153839" duration="1085000" />
       <workItem from="1760529289413" duration="2889000" />
-      <workItem from="1760703034400" duration="5083000" />
+      <workItem from="1760703034400" duration="11364000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -186,7 +185,15 @@
       <option name="project" value="LOCAL" />
       <updated>1759855683115</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="1D cos methode af">
+      <option name="closed" value="true" />
+      <created>1760713393524</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1760713393524</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -221,14 +228,15 @@
     <MESSAGE value="compare time from my own code with the scipy simpson function" />
     <MESSAGE value="compare time from my own code with the scipy simpson function and quad function" />
     <MESSAGE value="1D cos methode, werkt nog niet" />
-    <option name="LAST_COMMIT_MESSAGE" value="1D cos methode, werkt nog niet" />
+    <MESSAGE value="1D cos methode af" />
+    <option name="LAST_COMMIT_MESSAGE" value="1D cos methode af" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$code_emma.coverage" NAME="code emma Coverage Results" MODIFIED="1759855419659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$code_emma_1D_COS_methode.coverage" NAME="code emma 1D COS methode Coverage Results" MODIFIED="1760530118885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_simpson.coverage" NAME="Test, integrate cosine with simpson Coverage Results" MODIFIED="1759853767546" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_quad.coverage" NAME="Test, integrate cosine with quad Coverage Results" MODIFIED="1760528713086" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$1D_cos_method_numerically.coverage" NAME="1D cos method numerically Coverage Results" MODIFIED="1760706085877" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$1D_cos_method_numerically.coverage" NAME="1D cos method numerically Coverage Results" MODIFIED="1760716439742" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$2D_cos_method_numerically.coverage" NAME="2D cos method numerically Coverage Results" MODIFIED="1759500856069" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_library.coverage" NAME="Test, integrate cosine without library Coverage Results" MODIFIED="1759338488079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_existing_functions.coverage" NAME="Test, integrate cosine without existing functions Coverage Results" MODIFIED="1759847336113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />

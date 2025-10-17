@@ -20,15 +20,19 @@ def V_T(X_T,K,weight,option_type):
     return option_value
 
 # Here we define our characteristic function, depending on the distribution of X we work with.
-def characteristic_function(u,t,sigma,r):
-    #normal distribution:
-    characteristic_value = np.exp(1j * u * (r - 0.5 * sigma**2) * t - 0.5 * sigma**2 * u**2 * t)
-
+def characteristic_function(u_1,u_2,t,sigma_1,sigma_2,rho,r):
+    #bivariate normal distribution:
+    characteristic_value = np.exp(1j*t*(r(u_1+u_2) - 0.5*(u_1 * sigma_1**2 + u_2 * sigma_2**2)) - 0.5*t*(u_1**2 * sigma_1**2 + 2*u_1*u_2*sigma_1*sigma_2*rho + u_2**2 * sigma_2**2))
     return characteristic_value
 
-def phi(u,X_0,T,sigma,r):
-    return np.exp(1j*u*X_0)*characteristic_function(u,T,sigma,r)
+# This is the conditional characteristic function
+def phi(u_1,u_2,x_1,x_2,T,sigma_1,sigma_2,rho,r):
+    return np.exp(1j*(u_1*x_1 + u_2*x_2))*characteristic_function(u_1,u_2,T,sigma_1,sigma_2,rho,r)
 
+###########################################################################################################
+'''
+Hier ben ik gebleven!
+'''
 def H(k,a,b,K,n,option_type):
     integrand = lambda y: V_T(y,K,option_type) * np.cos(k * np.pi * (y-a)/(b-a))
     return 2/(b-a) * integral(a,b,integrand,n)
@@ -36,7 +40,7 @@ def H(k,a,b,K,n,option_type):
 def COS_formule(N,T,t_0,K,S_0,sigma,r,L,n,option_type):
     a = -L * np.sqrt(T)
     b = L * np.sqrt(T)
-    X_0 = np.log(S_0 / K)
+    X_0 = np.log(S_0 / K) # belangrijk! hier moet ik x_1, x_2 van maken (kleine letters heb ik boven gebruikt)
     somterm = lambda k:( phi(k*np.pi/(b-a),X_0,T,sigma,r) * np.exp(-1j*k*np.pi*a/(b-a)) ).real * H(k,a,b,K,n,option_type)
     return np.exp(-r * (T-t_0)) * (0.5*somterm(0) + sum(somterm(k) for k in range(1,N)))
 
