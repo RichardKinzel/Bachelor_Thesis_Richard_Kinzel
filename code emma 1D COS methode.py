@@ -70,7 +70,7 @@ def cos(kar,N,optie_type):
 
 #Bepaalt de eerlijke prijs voor een optiecontract op tijdstip t_0.
 #Hier kunnen we N ook passend kiezen.
-N=156
+N=16
 print(cos(karnormal,N,'put'))
 
 end_time = datetime.now()

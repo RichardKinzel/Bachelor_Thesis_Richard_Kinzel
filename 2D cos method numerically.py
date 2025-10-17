@@ -1,26 +1,22 @@
-#Here we will numerically compute the value of an option using the 1D cos method.
+#Here we will numerically compute the value of an option using the 2D cos method.
 
 import numpy as np
-from scipy.integrate import quad,simpson
+from scipy.integrate import dblquad
 import scipy.stats as st
 from datetime import datetime
 
 # Here we choose the way of numeric integration.
-def integral(lower_limit,upper_limit,integrand,n):
+def double_integral(lower_limit_1,upper_limit_1,lower_limit_2,upper_limit_2,integrand):
     #using scipy.integrade.quad:
-    #integral_value = quad(integrand, lower_limit, upper_limit)[0]
-
-    #using scipy.integrate.simpson:
-    x_values = np.linspace(lower_limit,upper_limit,n)
-    integral_value = simpson(integrand(x_values), x=x_values)
+    integral_value = dblquad(integrand, lower_limit_1, upper_limit_1, lower_limit_2, upper_limit_2)[0]
     return integral_value
 
-# Here we define the payoff function of an option at time T, depending on what type of option contract we use.
-def V_T(X_T,K,option_type):
+# Here we define the payoff function of a basket option at time T, depending on what type of option contract we use.
+def V_T(X_T,K,weight,option_type):
     if option_type == 'call':
-        option_value = np.maximum(K * (np.exp(X_T)-1), 0)
+        option_value = np.maximum(K * (np.inner(weight, np.exp(X_T)) - 1), 0)
     elif option_type == 'put':
-        option_value = np.maximum(-K * (np.exp(X_T)-1),0)
+        option_value = np.maximum(-K * (np.inner(weight, np.exp(X_T)) - 1), 0)
     return option_value
 
 # Here we define our characteristic function, depending on the distribution of X we work with.
