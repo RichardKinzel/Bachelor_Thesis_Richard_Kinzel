@@ -8,7 +8,7 @@ from datetime import datetime
 # Here we choose the way of numeric integration.
 def integral(lower_limit,upper_limit,integrand,n):
     #using scipy.integrade.quad:
-    integral_value = quad(integrand, lower_limit, upper_limit)[0]
+    integral_value = quad(integrand, lower_limit, upper_limit, limit=n)[0] #default limit of 50 leads to error for higher values of N. Hence the higher limit.
 
     #using scipy.integrate.simpson:
     # x_values = np.linspace(lower_limit,upper_limit,n)
@@ -45,13 +45,16 @@ def H(k,a,b,K,n,option_type):
         H_value = 2/(b-a) * integral(a,0,integrand,n)
     return H_value
 
+def sum_prime(N,summand):
+    return 0.5 * summand(0) + sum(summand(index) for index in range(1,N))
+
 # This is our main calculation. In in we use the functions defined above
-def COS_formule(N,T,t_0,K,S_0,sigma,r,L,n,option_type):
+def COS_formula(N,T,t_0,K,S_0,sigma,r,L,n,option_type):
     a = -L * np.sqrt(T)
     b = L * np.sqrt(T)
     X_0 = np.log(S_0 / K)
-    somterm = lambda k:( phi(k*np.pi/(b-a),X_0,T,sigma,r) * np.exp(-1j*k*np.pi*a/(b-a)) ).real * H(k,a,b,K,n,option_type)
-    return np.exp(-r * (T-t_0)) * (0.5*somterm(0) + sum(somterm(k) for k in range(1,N)))
+    summand = lambda k: np.real(phi(k*np.pi/(b-a),X_0,T,sigma,r) * np.exp(-1j*k*np.pi*a/(b-a))) * H(k,a,b,K,n,option_type)
+    return np.exp(-r * (T-t_0)) * sum_prime(N,summand)
 
 # In order to check the accuracy of our numeric approximation, we also calculate the option value analytically using Black Scholes.
 def Black_Scholes(option_type,S_0,K,sigma,T,t_0,r):
@@ -64,8 +67,7 @@ def Black_Scholes(option_type,S_0,K,sigma,T,t_0,r):
     return value
 
 # Values for all variables used
-N = 256 #scipy.integrate.quad seems to have some issues for N=256 using T=0.1. I suggest to use simpson rule, or change either N to 128 or T to a higher value, 10 for example.
-        # I tried manually setting integration limits so I could eliminate the maximum function in the integrand, but this didn't fix the issue.
+N = 256
 T = 0.1
 t_0 = 0
 K = 120
@@ -73,11 +75,11 @@ S_0 = 100
 sigma = 0.25
 r = 0.1
 L = 8
-option_type = 'call'
-n = 10000   #represents number of subintervals for integrating numerically, only relevant if using simpson rule. scipy.integrate.quad evaluates these subintervals autimatically.
+option_type = 'put'
+n = 1000 #custom limit of maximum number of integration subintervals that scipy.integrate.quad uses
 
 start_time = datetime.now()
-numeric_valuation = COS_formule(N, T, t_0, K, S_0, sigma, r, L, n, option_type)
+numeric_valuation = COS_formula(N, T, t_0, K, S_0, sigma, r, L, n, option_type)
 end_time = datetime.now()
 black_scholes_valuation = Black_Scholes(option_type, S_0, K, sigma, T, t_0, r)
 
