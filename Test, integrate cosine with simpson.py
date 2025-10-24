@@ -6,7 +6,7 @@ from scipy.integrate import simpson
 
 start_time = datetime.now()
 
-def integral(n,a,b,integrand):
+def integral(a,b,integrand):
     x = np.linspace(a,b,n)
     y = integrand(x)
     value = simpson(y, x=x)
@@ -18,11 +18,11 @@ def function(x):
 n = 10000
 a = 0
 b = 10
-numeric_integral = integral(n, a, b, function)
+numeric_integral = integral(a, b, function)
 
 end_time = datetime.now()
 
 print(f"Numeric: {numeric_integral}")
 print(f"Analytic: {np.sin(b)-np.sin(a)}")
-print(f"Error: {np.abs(integral(n, a, b, function) - np.sin(b)-np.sin(a))}")
+print(f"Error: {np.abs(numeric_integral - np.sin(b)-np.sin(a))}")
 print(f"Duration: {end_time - start_time}")

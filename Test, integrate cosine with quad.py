@@ -22,5 +22,5 @@ end_time = datetime.now()
 
 print(f"Numeric: {numeric_integral}")
 print(f"Analytic: {np.sin(b)-np.sin(a)}")
-print(f"Error: {np.abs(integral(n, a, b, function) - np.sin(b)-np.sin(a))}")
+print(f"Error: {np.abs(numeric_integral - np.sin(b)-np.sin(a))}")
 print(f"Duration: {end_time - start_time}")
