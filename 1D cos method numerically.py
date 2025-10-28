@@ -88,11 +88,12 @@ a = -L * np.sqrt(T)
 b = L * np.sqrt(T)
 X_0 = np.log(S_0 / K)
 
+black_scholes_valuation = Black_Scholes()
+
 # Main calculation
 start_time = datetime.now()
 numeric_valuation = COS_formula()
 end_time = datetime.now()
-black_scholes_valuation = Black_Scholes()
 
 # Printing the results
 print(f"Numeric: {numeric_valuation}")
