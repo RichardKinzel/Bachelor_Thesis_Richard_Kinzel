@@ -4,11 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="10b6086c-8363-4c48-b335-76ff6dbf0ef9" name="Changes" comment="2D cos methode bijna af">
-      <change afterPath="$PROJECT_DIR$/.idea/Bachelor_Thesis_Richard_Kinzel.iml" afterDir="false" />
+    <list default="true" id="10b6086c-8363-4c48-b335-76ff6dbf0ef9" name="Changes" comment="Python code af">
+      <change beforePath="$PROJECT_DIR$/.idea/Bachelor_Thesis_Richard_Kinzel.iml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/1D cos method numerically.py" beforeDir="false" afterPath="$PROJECT_DIR$/1D cos method numerically.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/2D cos method numerically.py" beforeDir="false" afterPath="$PROJECT_DIR$/2D cos method numerically.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test, integrate cosine with quad.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test, integrate cosine with simpson.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Test, integrate cosine without existing functions.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/code emma 1D COS methode.py" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,7 +63,9 @@
     &quot;Python.Test, integrate cosine without library.executor&quot;: &quot;Run&quot;,
     &quot;Python.code emma 1D COS methode.executor&quot;: &quot;Run&quot;,
     &quot;Python.code emma.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test 2D cos method.executor&quot;: &quot;Run&quot;,
     &quot;Python.test, 2D integration with function in limit.executor&quot;: &quot;Run&quot;,
+    &quot;Python.test.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
@@ -78,8 +84,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.26830.99" />
-        <option value="bundled-python-sdk-164cda30dcd9-0af03a5fa574-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.26830.99" />
+        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-PY-252.27397.106" />
+        <option value="bundled-python-sdk-4e2b1448bda8-9a97661f3031-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-252.27397.106" />
       </set>
     </attachedChunks>
   </component>
@@ -103,7 +109,13 @@
       <workItem from="1761126043180" duration="13588000" />
       <workItem from="1761310558642" duration="7214000" />
       <workItem from="1761568801923" duration="16671000" />
-      <workItem from="1761644037504" duration="22696000" />
+      <workItem from="1761644037504" duration="23359000" />
+      <workItem from="1761680676907" duration="4000" />
+      <workItem from="1761733062782" duration="4012000" />
+      <workItem from="1761830844359" duration="17182000" />
+      <workItem from="1762165305358" duration="120000" />
+      <workItem from="1762165440446" duration="7673000" />
+      <workItem from="1762332079213" duration="488000" />
     </task>
     <task id="LOCAL-00001" summary="test">
       <option name="closed" value="true" />
@@ -225,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1761317827114</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="Python code af">
+      <option name="closed" value="true" />
+      <created>1761679852792</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1761679852792</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -263,20 +283,34 @@
     <MESSAGE value="1D cos methode af" />
     <MESSAGE value="2D cos methode half af" />
     <MESSAGE value="2D cos methode bijna af" />
-    <option name="LAST_COMMIT_MESSAGE" value="2D cos methode bijna af" />
+    <MESSAGE value="Python code af" />
+    <option name="LAST_COMMIT_MESSAGE" value="Python code af" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="python-exception">
+          <properties notifyOnTerminate="true" exception="BaseException">
+            <option name="notifyOnTerminate" value="true" />
+          </properties>
+        </breakpoint>
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$code_emma_1D_COS_methode.coverage" NAME="code emma 1D COS methode Coverage Results" MODIFIED="1760530118885" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$1D_cos_method_numerically.coverage" NAME="1D cos method numerically Coverage Results" MODIFIED="1761315524267" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
-    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$2D_cos_method_numerically.coverage" NAME="2D cos method numerically Coverage Results" MODIFIED="1761570042026" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$1D_cos_method_numerically.coverage" NAME="1D cos method numerically Coverage Results" MODIFIED="1762166611854" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$2D_cos_method_numerically.coverage" NAME="2D cos method numerically Coverage Results" MODIFIED="1762172171427" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_library.coverage" NAME="Test, integrate cosine without library Coverage Results" MODIFIED="1759338488079" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$2D_cos_method_optimized.coverage" NAME="2D cos method optimized Coverage Results" MODIFIED="1761668504024" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Tab06_04.coverage" NAME="Tab06_04 Coverage Results" MODIFIED="1760531615375" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$USER_HOME$/Downloads" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$test_2D_cos_method.coverage" NAME="test 2D cos method Coverage Results" MODIFIED="1762172021465" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$code_emma.coverage" NAME="code emma Coverage Results" MODIFIED="1759855419659" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_simpson.coverage" NAME="Test, integrate cosine with simpson Coverage Results" MODIFIED="1761310679972" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_quad.coverage" NAME="Test, integrate cosine with quad Coverage Results" MODIFIED="1761310746926" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_without_existing_functions.coverage" NAME="Test, integrate cosine without existing functions Coverage Results" MODIFIED="1759847336113" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$Test__integrate_cosine_with_library.coverage" NAME="Test, integrate cosine with library Coverage Results" MODIFIED="1759338454807" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
     <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$test__2D_integration_with_function_in_limit.coverage" NAME="test, 2D integration with function in limit Coverage Results" MODIFIED="1761573878328" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
+    <SUITE FILE_PATH="coverage/Bachelor_Thesis_Richard_Kinzel$test.coverage" NAME="test Coverage Results" MODIFIED="1761849760216" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
   </component>
 </project>

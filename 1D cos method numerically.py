@@ -83,10 +83,16 @@ L = 8       # Used for determining the size of truncation domain
 option_type = 'call' # put or call
 integration_subintervals = 1000    #custom limit of maximum number of integration subintervals that scipy.integrate.quad uses
 
-# Variables that are computed automatically
-a = -L * np.sqrt(T)
-b = L * np.sqrt(T)
 X_0 = np.log(S_0 / K)
+def cumulant(i): # the i-th cumulant, assuming GBM
+    if i == 1:
+        return (r - 0.5 * sigma**2)*T
+    elif i == 2:
+        return sigma**2 * T
+    elif i == 4:
+        return 0
+a = X_0 + cumulant(1) - L*np.sqrt(cumulant(2) + np.sqrt(cumulant(4)))
+b = X_0 + cumulant(1) + L*np.sqrt(cumulant(2) + np.sqrt(cumulant(4)))
 
 black_scholes_valuation = Black_Scholes()
 
