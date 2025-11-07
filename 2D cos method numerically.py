@@ -1,7 +1,5 @@
 #Here we will numerically compute the value of an option using the 2D cos method.
 
-import cProfile
-import pstats
 import numpy as np
 from scipy.fftpack import dctn
 from datetime import datetime
@@ -21,10 +19,8 @@ def characteristic_function(u_1,u_2,t):
     #bivariate normal distribution:
     characteristic_value = np.exp(1j*t*(r*(u_1+u_2) - 0.5*(u_1 * sigma_1**2 + u_2 * sigma_2**2)) - 0.5*t*(u_1**2 * sigma_1**2 + 2*u_1*u_2*sigma_1*sigma_2*rho + u_2**2 * sigma_2**2))
     return characteristic_value
-# This is the conditional characteristic function
 def conditional_characteristic_function(u_1,u_2):
     return np.exp(1j*(u_1*x_1 + u_2*x_2)) * characteristic_function(u_1,u_2,T)
-
 def F(k_1,k_2,plusminus):
     # Here plusminus should be equal to either +1 or -1
     return 2/(b_1-a_1) * 2/(b_2-a_2) * np.real( conditional_characteristic_function(k_1*np.pi/(b_1-a_1),plusminus*k_2*np.pi/(b_2-a_2)) * np.exp(-1j*np.pi*k_1*a_1/(b_1-a_1) - 1j*np.pi*plusminus*k_2*a_2/(b_2-a_2)) )
@@ -37,9 +33,10 @@ def double_sum_prime(N_1,N_2,summand):
     return sum_prime(N_1,inner_sum)
 
 # This is our main calculation. In it we use the functions defined above
-def COS_formula(N,option_type):
-    # option_type should be 'put' or 'call'
+def COS_formula(N,Q,option_type):
+    # option_type should be 'basket call', 'basket put', 'call on max' or 'put on min'
     # N (= N_1 = N_2) are the summation limits
+    # Q is number of integration subintervals
     y_index = np.arange(Q)
     y1_midpoints = a_1 + (b_1 - a_1) / Q * (y_index + 0.5)
     y2_midpoints = a_2 + (b_2 - a_2) / Q * (y_index + 0.5)
@@ -65,7 +62,7 @@ weight_1, weight_2 = 0.5, 0.5 # weights used, only relevant in the case of a bas
 rho = 0.25 # correlation coefficient
 r = 0.04 # risk-free continuous interest rate
 L = 8 # used for determining the size of truncation domain
-Q = 1000 # number of integration intervals
+reference_value_basket_call = 10.173230
 
 x_1, x_2 = np.log(S_0 / K)
 # the following functions define the i-th cumulant for first and second asset respectively
@@ -86,32 +83,49 @@ def cumulant_2(i):
 a_1 = a_2 = np.minimum(x_1 + cumulant_1(1) - L*np.sqrt(cumulant_1(2) + np.sqrt(cumulant_1(4))), x_2 + cumulant_2(1) - L*np.sqrt(cumulant_2(2) + np.sqrt(cumulant_2(4))))
 b_1 = b_2 = np.maximum(x_1 + cumulant_1(1) + L*np.sqrt(cumulant_1(2) + np.sqrt(cumulant_1(4))), x_2 + cumulant_2(1) + L*np.sqrt(cumulant_2(2) + np.sqrt(cumulant_2(4))))
 
-# with cProfile.Profile() as profile:
-#     print(f"numeric_valuation = {COS_formula(60,'basket call')}")
-# results = pstats.Stats(profile)
-# results.sort_stats('tottime').print_stats()
-
-# converting datetime.timedelta object to minutes
 def seconds(time):
     return time.days * 24 * 60 * 60 + time.seconds + time.microseconds / 1000000
-
-# for computing and printing the valuations, and the duration of computation
-def print_results(N,option_type):
+def print_results(N, Q, option_type):
     start_time = datetime.now()
-    numeric_value = COS_formula(N,option_type)
+    numeric_value = COS_formula(N, Q, option_type)
     end_time = datetime.now()
     duration = end_time - start_time
 
-    print(f"N_1 = N_2 = {N}")
+    print(f"N_1 = N_2 = {N}, Q = {Q}")
     print(f"Value {option_type} option: {numeric_value}")
+    if option_type == 'basket call':
+        print(f"Error: {abs(numeric_value - reference_value_basket_call):.2e}")
     print(f"Duration: {seconds(duration)} seconds")
     print("")
     return
+def print_latex_table(option_type): #only supported for basket call, unless other reference values are added.
+    error_list = np.array([])
+    duration_list = np.array([])
+    for Q in range(500, 3000, 500):
+        for N in range(20,120,20):
+            start_time = datetime.now()
+            numeric_valuation = COS_formula(N, Q, option_type)
+            end_time = datetime.now()
+            duration = end_time - start_time
+            if option_type == 'basket call':
+                error = abs(numeric_valuation - reference_value_basket_call)
 
-# print_results(60,'basket call')
+            error_list = np.append(error_list, f"{error:.2e}")
+            duration_list = np.append(duration_list, f"{seconds(duration):.2e}")
+    print("Absolute error:")
+    error_matrix = error_list.reshape(5,5)
+    for row in range(5):
+        Q = 500 * (row + 1)
+        error_row_string = f"{Q} & {error_matrix[row][0]} & {error_matrix[row][1]} & {error_matrix[row][2]} & {error_matrix[row][3]} & {error_matrix[row][4]} \\\\"
+        print(error_row_string)
+    print("")
+    print("Duration:")
+    duration_matrix = duration_list.reshape(5, 5)
+    for row in range(5):
+        Q = 500 * (row + 1)
+        duration_row_string = f"{Q} & {duration_matrix[row][0]} & {duration_matrix[row][1]} & {duration_matrix[row][2]} & {duration_matrix[row][3]} & {duration_matrix[row][4]} \\\\"
+        print(duration_row_string)
+    return
 
-for N in range(20,120,20):
-    print_results(N,'basket call')
-
-for N in range(20,120,20):
-    print_results(N,'basket put')
+print_results(200, 5000, 'basket call')
+print_latex_table('basket call')
