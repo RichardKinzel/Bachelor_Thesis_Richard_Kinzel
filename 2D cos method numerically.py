@@ -9,10 +9,10 @@ def basket_call_payoff(y_1, y_2):
     return np.maximum(K * (weight_1*np.exp(y_1) + weight_2*np.exp(y_2) - 1),0)
 def basket_put_payoff(y_1, y_2):
     return np.maximum(-K * (weight_1*np.exp(y_1) + weight_2*np.exp(y_2) - 1),0)
-def call_on_max_payoff(y_1, y_2):
-    return np.maximum(np.max(np.exp(y_1), np.exp(y_2)) - K, 0)
-def put_on_min_payoff(y_1, y_2):
-    return np.maximum(K - np.min(np.exp(y_1), np.exp(y_2)), 0)
+# def call_on_max_payoff(y_1, y_2):
+#     return np.maximum(K * (np.maximum(np.exp(y_1), np.exp(y_2)) - 1), 0)
+# def put_on_min_payoff(y_1, y_2):
+#     return np.maximum(-K * (np.minimum(np.exp(y_1), np.exp(y_2)) - 1), 0)
 
 # Here we define our characteristic function, depending on the distribution of X we work with.
 def characteristic_function(u_1,u_2,t):
@@ -44,14 +44,15 @@ def COS_formula(N,Q,option_type):
         payoff_midpoints = basket_call_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
     elif option_type == 'basket put':
         payoff_midpoints = basket_put_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
-    elif option_type == 'call on max':
-        payoff_midpoints = call_on_max_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
-    elif option_type == 'put on min':
-        payoff_midpoints = put_on_min_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
+    # elif option_type == 'call on max':
+    #     payoff_midpoints = call_on_max_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
+    # elif option_type == 'put on min':
+    #     payoff_midpoints = put_on_min_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
     H_matrix = dctn(payoff_midpoints, type=2) / (Q ** 2)
     summand = lambda k_1, k_2: 0.5 * (F(k_1,k_2,plusminus=+1) + F(k_1,k_2,plusminus=-1)) * H_matrix[k_1,k_2]
     return (b_1 - a_1)/2 * (b_2 - a_2)/2 * np.exp(-r * (T-t_0)) * double_sum_prime(N,N,summand)
 
+#parameter set basket call / basket put
 T = 1 # time of maturity
 t_0 = 0 # starting time of option contract
 K = 100 # strike price for basket option
@@ -63,6 +64,18 @@ rho = 0.25 # correlation coefficient
 r = 0.04 # risk-free continuous interest rate
 L = 8 # used for determining the size of truncation domain
 reference_value_basket_call = 10.173230
+
+#parameter set call on max / put on min
+# T = 7/12 # time of maturity
+# t_0 = 0 # starting time of option contract
+# K = 40 # strike price for basket option
+# S_0 = np.array([40,40]) # asset prices at t=0
+# sigma_1 = 0.2 # volatility of first asset
+# sigma_2 = 0.3 # volatility of second asset
+# rho = 0.5 # correlation coefficient
+# r = 0.048790 # risk-free continuous interest rate
+# L = 8 # used for determining the size of truncation domain
+# reference_value_call_on_max = 18.477 # uit Emma haar scriptie
 
 x_1, x_2 = np.log(S_0 / K)
 # the following functions define the i-th cumulant for first and second asset respectively
@@ -95,6 +108,8 @@ def print_results(N, Q, option_type):
     print(f"Value {option_type} option: {numeric_value}")
     if option_type == 'basket call':
         print(f"Error: {abs(numeric_value - reference_value_basket_call):.2e}")
+    # if option_type == 'call on max':
+    #     print(f"Error: {abs(numeric_value - reference_value_call_on_max):.2e}")
     print(f"Duration: {seconds(duration)} seconds")
     print("")
     return
@@ -127,5 +142,5 @@ def print_latex_table(option_type): #only supported for basket call, unless othe
         print(duration_row_string)
     return
 
-print_results(200, 5000, 'basket call')
+print_results(100, 2000, 'basket call')
 print_latex_table('basket call')
