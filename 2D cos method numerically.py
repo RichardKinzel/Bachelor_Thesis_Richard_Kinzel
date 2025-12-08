@@ -9,10 +9,10 @@ def basket_call_payoff(y_1, y_2):
     return np.maximum(K * (weight_1*np.exp(y_1) + weight_2*np.exp(y_2) - 1),0)
 def basket_put_payoff(y_1, y_2):
     return np.maximum(-K * (weight_1*np.exp(y_1) + weight_2*np.exp(y_2) - 1),0)
-# def call_on_max_payoff(y_1, y_2):
-#     return np.maximum(K * (np.maximum(np.exp(y_1), np.exp(y_2)) - 1), 0)
-# def put_on_min_payoff(y_1, y_2):
-#     return np.maximum(-K * (np.minimum(np.exp(y_1), np.exp(y_2)) - 1), 0)
+def call_on_max_payoff(y_1, y_2):
+    return np.maximum(K * (np.maximum(np.exp(y_1), np.exp(y_2)) - 1), 0)
+def put_on_min_payoff(y_1, y_2):
+    return np.maximum(-K * (np.minimum(np.exp(y_1), np.exp(y_2)) - 1), 0)
 
 # Here we define our characteristic function, depending on the distribution of X we work with.
 def characteristic_function(u_1,u_2,t):
@@ -44,10 +44,10 @@ def COS_formula(N,Q,option_type):
         payoff_midpoints = basket_call_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
     elif option_type == 'basket put':
         payoff_midpoints = basket_put_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
-    # elif option_type == 'call on max':
-    #     payoff_midpoints = call_on_max_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
-    # elif option_type == 'put on min':
-    #     payoff_midpoints = put_on_min_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
+    elif option_type == 'call on max':
+        payoff_midpoints = call_on_max_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
+    elif option_type == 'put on min':
+        payoff_midpoints = put_on_min_payoff(y1_midpoints.reshape(Q, 1), y2_midpoints.reshape(1, Q))
     H_matrix = dctn(payoff_midpoints, type=2) / (Q ** 2)
     summand = lambda k_1, k_2: 0.5 * (F(k_1,k_2,plusminus=+1) + F(k_1,k_2,plusminus=-1)) * H_matrix[k_1,k_2]
     return (b_1 - a_1)/2 * (b_2 - a_2)/2 * np.exp(-r * (T-t_0)) * double_sum_prime(N,N,summand)
