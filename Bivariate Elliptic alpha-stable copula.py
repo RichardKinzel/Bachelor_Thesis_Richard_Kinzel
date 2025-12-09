@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from scipy.stats import norm, multivariate_normal
 from scipy.integrate import quad, dblquad
 from scipy.optimize import newton
+from statsmodels.distributions.copula.api import GaussianCopula
 
 alpha = 2
 rho = 0.5
@@ -151,23 +152,24 @@ def quantile(u,phi):
 # u = np.array([0, 0.25, 0.5, 0.75, 1])
 # for value in u:
 #     print(f"F^-1_X ({value}) = {quantile(value, univariate_characteristic_function_1):.4}")
+# print(f"Array u als input geeft F^-1_X (u) = {quantile(u, univariate_characteristic_function_1)}")
 
 def copula_density(u,v):
     u_quantile = quantile(u,univariate_characteristic_function_1)
     v_quantile = quantile(v,univariate_characteristic_function_2)
     return multivariate_density_COS(u_quantile, v_quantile, N_joint) / (univariate_density_COS(u_quantile, univariate_characteristic_function_1, N_marginal) * univariate_density_COS(v_quantile, univariate_characteristic_function_2, N_marginal))
 
+# for (u,v) in [(0.5, 0.5), (0.5, 0.9), (0.9, 0.5), (0.9, 0.9), (0.1, 0.1), (0.1, 0.9), (0.9, 0.1), (0.99, 0.99), (0.01, 0.01)]:
+#     print(f"c({u}, {v}) = {copula_density(u,v):.4}")
+
 points = 100
-u_values = v_values = np.linspace(0, 1, points)
+epsilon = 1e-2
+u_values = v_values = np.linspace(epsilon, 1 - epsilon, points)
 U, V = np.meshgrid(u_values, v_values)
 W = copula_density(U, V)
 
 plt.figure(figsize=(10, 8))
-# contourf fills the area (use plt.contour for lines only)
-# 'levels' determines how many distinct colors/lines there are
-# 'cmap' sets the color scheme (e.g., 'viridis', 'plasma', 'coolwarm')
 contour = plt.contourf(U, V, W, levels=20, cmap='viridis', extend='both')
-
 cbar = plt.colorbar(contour)
 cbar.set_label('Copula Density Value')
 plt.title(f"Contour Plot of copula density approximation for alpha = {alpha}")
@@ -175,4 +177,74 @@ plt.xlabel('U = F^-1_X (X)')
 plt.ylabel('V = F^-1_Y (Y)')
 plt.show()
 
-# print(f"double integral of copula density = {dblquad(copula_density, 0, 1, 0,1)}")
+# # 1. Avoid 0 and 1. Use a small epsilon.
+# points = 100
+# epsilon = 1e-2
+# u_values = v_values = np.linspace(epsilon, 1 - epsilon, points)
+#
+# # 2. Optimization: Calculate quantiles on 1D arrays first!
+# # This reduces Newton solver calls from 10,000 to 200.
+# u_quantiles = quantile(u_values, univariate_characteristic_function_1)
+# v_quantiles = quantile(v_values, univariate_characteristic_function_2)
+#
+# # 3. Create the meshgrid based on the calculated quantiles (Input for Density)
+# # Q_U corresponds to F^-1(u) and Q_V corresponds to F^-1(v)
+# Q_U, Q_V = np.meshgrid(u_quantiles, v_quantiles)
+#
+# print("Calculating Joint Density...")
+#
+# # 4. Calculate the Numerator (Joint Density) using the Quantile Grid
+# num = multivariate_density_COS(Q_U, Q_V, N_joint)
+#
+# print("Calculating Marginal Densities...")
+#
+# # 5. Calculate Denominators (Marginal Densities)
+# # We can reuse the 1D calculations and broadcast, or just pass the 2D grid
+# den_u = univariate_density_COS(Q_U, univariate_characteristic_function_1, N_marginal)
+# den_v = univariate_density_COS(Q_V, univariate_characteristic_function_2, N_marginal)
+#
+# # 6. Compute Copula Density
+# W = num / (den_u * den_v)
+#
+# # 7. Plotting
+# # We use the original u_values, v_values for the axes (0 to 1),
+# # but plot the W we calculated from the transformed Q_U, Q_V.
+# U_grid, V_grid = np.meshgrid(u_values, v_values)
+#
+# plt.figure(figsize=(10, 8))
+#
+# # Copula densities often have high spikes at corners.
+# # heavily restricting 'levels' allows you to see the structure in the middle.
+# contour = plt.contourf(U_grid, V_grid, W, levels=20, cmap='viridis', extend='both')
+#
+# cbar = plt.colorbar(contour)
+# cbar.set_label('Copula Density Value')
+# plt.title(f"Contour Plot of Copula Density (alpha={alpha}, rho={rho})")
+# plt.xlabel('u')
+# plt.ylabel('v')
+# plt.show()
+
+
+
+
+
+# Gaussian copula density plotten
+gaussian_copula = GaussianCopula(corr=rho, k_dim=2, allow_singular=False)
+
+points = 100
+u_values = v_values = np.linspace(0, 1, points)
+U, V = np.meshgrid(u_values, v_values)
+pos = np.dstack((U, V))
+datapoints = pos.reshape(-1, 2)
+W = gaussian_copula.pdf(datapoints).reshape(U.shape)
+
+plt.figure(figsize=(10, 8))
+contour = plt.contourf(U, V, W, levels=20, cmap='viridis', extend='both')
+cbar = plt.colorbar(contour)
+cbar.set_label('Copula Density Value')
+plt.title(f"Contour Plot of Gaussian copula density")
+plt.xlabel('U = F^-1_X (X)')
+plt.ylabel('V = F^-1_Y (Y)')
+plt.show()
+
+# print(f"double integral of copula density = {dblquad(copula_density, epsilon, 1 - epsilon, epsilon, 1 - epsilon)}")
