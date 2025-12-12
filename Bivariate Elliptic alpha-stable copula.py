@@ -4,14 +4,18 @@ from scipy.stats import norm, multivariate_normal
 from scipy.integrate import quad, dblquad
 from scipy.optimize import newton
 from statsmodels.distributions.copula.api import GaussianCopula
+from scipy.fftpack import dct, dctn, dst
+
+import cProfile
+import pstats
 
 alpha = 2
 rho = 0.5
 sigma_1 = 1
 sigma_2 = 0.5
-L = 6
-N_marginal = 64 # of 128
-N_joint = 32 # of 48
+L = 10
+N_marginal = 2000 # of 128
+N_joint = 800 # of 48
 
 a = -L
 b = L
@@ -20,6 +24,7 @@ b_1 = b_2 = b
 
 cov_matrix = [[sigma_1**2, rho * sigma_1 * sigma_2],
        [rho * sigma_1 * sigma_2, sigma_2**2]]
+gaussian_copula = GaussianCopula(corr=rho, k_dim=2, allow_singular=False)
 
 def sum_prime(N,summand):
     return 0.5 * summand(0) + sum(summand(index) for index in range(1,N))
@@ -29,7 +34,7 @@ def double_sum_prime(N_1,N_2,summand):
 
 def multivariate_characteristic_function(t_1, t_2):
     # Kan ook met factor 0.5 erbij in de exponent! dan komt helemaal overeen met normale verdeling voor alpha=2
-    return np.exp(- (sigma_1**2 * t_1**2 + 2 * rho * sigma_1 * sigma_2 * t_1 * t_2 + sigma_2**2 * t_2**2)**(alpha/2))
+    return np.exp(-0.5* (sigma_1**2 * t_1**2 + 2 * rho * sigma_1 * sigma_2 * t_1 * t_2 + sigma_2**2 * t_2**2)**(alpha/2))
 def univariate_characteristic_function_1(t):
     return multivariate_characteristic_function(t, 0)
 def univariate_characteristic_function_2(t):
@@ -52,16 +57,24 @@ def univariate_characteristic_function_2(t):
 # plt.legend()
 # plt.show()
 
-def univariate_density_COS(x,phi, N):
+def univariate_density_COS(x,phi,N):
+    # x_index = np.arange(Q)
+    # x_midpoints = a + (b - a) / Q * (x_index + 0.5)
+    k_values = np.arange(N)
     A = lambda k: 2 / (b - a) * np.real(phi(k * np.pi / (b - a)) * np.exp(-1j * k * np.pi * a / (b - a)))
-    summand = lambda k: A(k) * np.cos(k * np.pi * (x - a) / (b - a))
-    return sum_prime(N, summand)
-# PLotting the univariate density functions.
+    density_midpoints = dct(A(k_values), type=3) / 2
+
+    subinterval_length = (b - a) / N
+    interval_number = np.floor(np.abs(x-a) / subinterval_length).astype(int)
+    interval_number = np.clip(interval_number, 0, N-1) # without this line x=b can't be assigned to an interval
+    return density_midpoints[interval_number]
+
+# # PLotting the univariate density functions.
 # t_values = np.linspace(a,b,1000)
 #
 # plt.plot(t_values, univariate_density_COS(t_values, univariate_characteristic_function_1, N_marginal), label = f"Numeric marginal pdf", color = 'b')
 # plt.plot(t_values, norm.pdf(t_values, loc=0, scale=sigma_1), label = f"Normal pdf", color = 'r')
-# plt.title(f"Univariate Density Functions for sigma = {sigma_1}")
+# plt.title(f"Marginal Density Function for alpha = {alpha} and sigma = {sigma_1}")
 # plt.legend()
 # plt.show()
 
@@ -81,12 +94,23 @@ def F_plusminus(k_1, k_2,plusminus): # Here plusminus should be equal to either 
     return 2/(b_1-a_1) * 2/(b_2-a_2) * np.real(multivariate_characteristic_function(k_1*np.pi/(b_1-a_1), plusminus*k_2*np.pi/(b_2-a_2)) * np.exp(-1j*np.pi*k_1*a_1/(b_1-a_1) - 1j*np.pi*plusminus*k_2*a_2/(b_2-a_2)))
 
 def multivariate_density_COS(x,y,N):
-    F = lambda k_1, k_2: 1/2 * (F_plusminus(k_1,k_2,plusminus=+1) + F_plusminus(k_1,k_2,plusminus=-1))
-    # print(f"F(0,0) = {F(0,0)}")
-    # print(f"4/((b_1-a_1)(b_2-a_2)) = {4/((b_1-a_1)*(b_2-a_2))}")
-    # print("")
-    summand = lambda k_1, k_2: F(k_1, k_2) * np.cos(k_1*np.pi*(x-a_1)/(b_1-a_1)) * np.cos(k_2*np.pi*(y-a_2)/(b_2-a_2))
-    return double_sum_prime(N, N, summand)
+    k_values = np.arange(N)
+    F = lambda k_1, k_2: 1 / 2 * (F_plusminus(k_1, k_2, plusminus=+1) + F_plusminus(k_1, k_2, plusminus=-1))
+    density_midpoints = dctn(F(k_values.reshape(N, 1), k_values.reshape(1, N)), type=3) / 4
+
+    subinterval_length_x = (b_1 - a_1) / N
+    subinterval_length_y = (b_2 - a_2) / N
+    interval_number_x = np.floor(np.abs(x - a_1) / subinterval_length_x).astype(int)
+    interval_number_y = np.floor(np.abs(y - a_2)/ subinterval_length_y).astype(int)
+    interval_number_x = np.clip(interval_number_x, 0, N-1) # without this line x=b can't be assigned to an interval
+    interval_number_y = np.clip(interval_number_y, 0, N-1) # without this line y=b can't be assigned to an interval
+    return density_midpoints[interval_number_x, interval_number_y]
+    # F = lambda k_1, k_2: 1/2 * (F_plusminus(k_1,k_2,plusminus=+1) + F_plusminus(k_1,k_2,plusminus=-1))
+    # # print(f"F(0,0) = {F(0,0)}")
+    # # print(f"4/((b_1-a_1)(b_2-a_2)) = {4/((b_1-a_1)*(b_2-a_2))}")
+    # # print("")
+    # summand = lambda k_1, k_2: F(k_1, k_2) * np.cos(k_1*np.pi*(x-a_1)/(b_1-a_1)) * np.cos(k_2*np.pi*(y-a_2)/(b_2-a_2))
+    # return double_sum_prime(N, N, summand)
 
 # print statements in de functie worden uitgevoerd
 # test = multivariate_density_COS(0,0,multivariate_characteristic_function, N_joint)
@@ -135,9 +159,27 @@ def multivariate_density_COS(x,y,N):
 # plt.show()
 
 def univariate_cdf(x, phi, N):
+    # k_values = np.arange(1,N+1)
+    # A = lambda k: 2 / (b - a) * np.real(phi(k * np.pi / (b - a)) * np.exp(-1j * k * np.pi * a / (b - a)))
+    # coefficients = lambda k: (b - a) / (k * np.pi) * A(k)
+    # dst_coefficients = coefficients(k_values)
+    # dst_coefficients[-1] *= 2
+    # summation_midpoints = dst(coefficients(k_values), type=3) / 2
+    #
+    # x_index = np.arange(N)
+    # x_midpoints = a + (b - a) / N * (x_index + 0.5)
+    # linear_term = A(0) * (x_midpoints - a) / (2 * (b-a))
+    #
+    # cdf_midpoints = linear_term + summation_midpoints
+    #
+    # subinterval_length = (b - a) / N
+    # interval_number = np.floor(np.abs(x - a) / subinterval_length).astype(int)
+    # interval_number = np.clip(interval_number, 0, N - 1)  # without this line x=b can't be assigned to an interval
+    # return cdf_midpoints[interval_number]
+
     A = lambda k: 2 / (b - a) * np.real(phi(k * np.pi / (b - a)) * np.exp(-1j * k * np.pi * a / (b - a)))
     summand = lambda k: A(k) * (b - a) / (k * np.pi) * np.sin(k * np.pi * (x - a) / (b - a))
-    return (x - a) / 2 * A(0) + sum(summand(k) for k in range(1,N))
+    return (x - a) / 2 * A(0) + sum(summand(k) for k in range(1, N))
 
 # # testing the univariate cdf
 # x = np.array([a, -1, 0, 1, b])
@@ -162,21 +204,26 @@ def copula_density(u,v):
 # for (u,v) in [(0.5, 0.5), (0.5, 0.9), (0.9, 0.5), (0.9, 0.9), (0.1, 0.1), (0.1, 0.9), (0.9, 0.1), (0.99, 0.99), (0.01, 0.01)]:
 #     print(f"c({u}, {v}) = {copula_density(u,v):.4}")
 
-points = 100
-epsilon = 1e-2
-u_values = v_values = np.linspace(epsilon, 1 - epsilon, points)
-U, V = np.meshgrid(u_values, v_values)
-W = copula_density(U, V)
+# for u in np.linspace(0,1,21):
+#     print(f"u = {u:.3}")
+#     for v in range(5, 10):
+#         print(f"v = {10**-v}: c = {copula_density(u, 10**-v):.3}", end=' | ')
+#     print("")
+#     print("")
 
-plt.figure(figsize=(10, 8))
-contour = plt.contourf(U, V, W, levels=20, cmap='viridis', extend='both')
-cbar = plt.colorbar(contour)
-cbar.set_label('Copula Density Value')
-plt.title(f"Contour Plot of copula density approximation for alpha = {alpha}")
-plt.xlabel('U = F^-1_X (X)')
-plt.ylabel('V = F^-1_Y (Y)')
-plt.show()
+def contour_plot_COS(points, epsilon):
+    u_values = v_values = np.linspace(epsilon, 1 - epsilon, points)
+    U, V = np.meshgrid(u_values, v_values)
+    W = copula_density(U, V)
 
+    plt.figure(figsize=(10, 8))
+    contour = plt.contourf(U, V, W, levels=20, cmap='viridis', extend='both')
+    cbar = plt.colorbar(contour)
+    cbar.set_label('Copula Density Value')
+    plt.title(f"Copula density for alpha = {alpha:.1f}, L = {L}, N = {N_marginal}, M = {N_joint}")
+    plt.xlabel('U = F^-1_X (X)')
+    plt.ylabel('V = F^-1_Y (Y)')
+    plt.show()
 # # 1. Avoid 0 and 1. Use a small epsilon.
 # points = 100
 # epsilon = 1e-2
@@ -229,22 +276,32 @@ plt.show()
 
 
 # Gaussian copula density plotten
-gaussian_copula = GaussianCopula(corr=rho, k_dim=2, allow_singular=False)
+def contour_plot_Gaussian(points, epsilon):
+    u_values = v_values = np.linspace(epsilon, 1 - epsilon, points)
+    U, V = np.meshgrid(u_values, v_values)
+    pos = np.dstack((U, V))
+    datapoints = pos.reshape(-1, 2)
+    W = gaussian_copula.pdf(datapoints).reshape(U.shape)
 
-points = 100
-u_values = v_values = np.linspace(0, 1, points)
-U, V = np.meshgrid(u_values, v_values)
-pos = np.dstack((U, V))
-datapoints = pos.reshape(-1, 2)
-W = gaussian_copula.pdf(datapoints).reshape(U.shape)
+    plt.figure(figsize=(10, 8))
+    contour = plt.contourf(U, V, W, levels=20, cmap='viridis', extend='both')
+    cbar = plt.colorbar(contour)
+    cbar.set_label('Copula Density Value')
+    plt.title(f"Contour Plot of Gaussian copula density")
+    plt.xlabel('U = F^-1_X (X)')
+    plt.ylabel('V = F^-1_Y (Y)')
+    plt.show()
 
-plt.figure(figsize=(10, 8))
-contour = plt.contourf(U, V, W, levels=20, cmap='viridis', extend='both')
-cbar = plt.colorbar(contour)
-cbar.set_label('Copula Density Value')
-plt.title(f"Contour Plot of Gaussian copula density")
-plt.xlabel('U = F^-1_X (X)')
-plt.ylabel('V = F^-1_Y (Y)')
-plt.show()
+with cProfile.Profile() as profile:
+    points = 100
+    epsilon = 1e-2
+    # for alpha in np.linspace(0, 2, 11):
+    for alpha in [0.8, 1.0, 1.2]:
+        for L in [10,20]:
+            contour_plot_COS(points, epsilon)
+    # contour_plot_Gaussian(points, epsilon)
+
+results = pstats.Stats(profile)
+results.sort_stats('tottime').print_stats()
 
 # print(f"double integral of copula density = {dblquad(copula_density, epsilon, 1 - epsilon, epsilon, 1 - epsilon)}")
