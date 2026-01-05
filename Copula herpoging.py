@@ -18,7 +18,7 @@ def double_sum_prime(N_1,N_2,summand):
     return sum_prime(N_1,inner_sum)
 
 def multivariate_characteristic_function(t_1, t_2):
-    # Kan ook met factor 0.5 erbij in de exponent! dan komt helemaal overeen met normale verdeling voor alpha=2
+    # Kan ook met factor 0.5 erbij in de exponent! Komt dan overeen met Gaussian voor alpha=2 maar heeft geen invloed op copula lijkt het
     return np.exp(- (sigma_1**2 * t_1**2 + 2 * rho * sigma_1 * sigma_2 * t_1 * t_2 + sigma_2**2 * t_2**2)**(alpha/2))
 def univariate_characteristic_function_1(t):
     return multivariate_characteristic_function(t, 0)
@@ -169,7 +169,7 @@ for alpha in [2.0, 1.8, 1.6, 1.4, 1.2, 1.0, 0.8]:
     L = 10
     N_marginal = 10000  # of 128
     N_joint = 10000  # of 48
-    epsilon = 1e-5
+    epsilon = 1e-3
 
     a = -L
     b = L
@@ -226,15 +226,23 @@ for alpha in [2.0, 1.8, 1.6, 1.4, 1.2, 1.0, 0.8]:
 
     # plot_tail_coefficient(epsilon) #deze functie maakt een plotje van de coefficient voor verschillende u, en ook worden de waardes van de coefficient in de console geprint
 
-    contour_plot_COS(100, epsilon=0)
-    # contour_plot_Gaussian(100, epsilon)
-    print(f"double integral of copula density for alpha {alpha} is: {dblquad(lambda x, y: copula_density(x, y), 0, 1, 0, 1)[0]}")
+    for u in [0.9, 0.95, 0.97, 0.99]:
+        coefficient = dblquad(lambda x,y: copula_density(x,y), u, 1 - epsilon, u, 1 - epsilon)[0] / (1 - epsilon - u)
+        print(f"lambda_upper ({u}) = {coefficient}")
+        if alpha == 2.0:
+            gaussian_coefficient = dblquad(lambda x, y: gaussian_copula.pdf((x, y)), u, 1 - epsilon, u, 1 - epsilon)[0] / (1 - epsilon - u)
+            print(f"error from actual coefficient = {np.abs(gaussian_coefficient - coefficient)}")
+        # integral = dblquad(lambda x, y: copula_density(x, y), u, 1 - epsilon, u, 1 - epsilon)[0]
+        # gaussian_integral = dblquad(lambda x, y: gaussian_copula.pdf((x, y), u, 1 - epsilon, u, 1 - epsilon)[0]
+        # print(f"integral from ({u},{u}) to (1,1) = {integral}")
+        # print(f"error from actual integral = {np.abs(gaussian_integral - integral)}")
+
+    # contour_plot_COS(100, epsilon=0)
+    # contour_plot_Gaussian(100, epsilon=0)
+    # print(f"double integral of copula density for alpha {alpha} is: {dblquad(lambda x, y: copula_density(x, y), 0, 1, 0, 1)[0]}")
 
     # u = 0.95
     # print(f"upper tail coefficient = {upper_tail_coefficient(u, epsilon)}")
-
-    # u = np.array([0.000001, 0.25, 0.5, 0.75, 0.999999])
-    # print(f"quantiles = {quantile_gridpoints(marginal_cdf_x, u)}")
 
 profiler.disable()
 results = pstats.Stats(profiler)
