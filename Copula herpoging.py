@@ -156,39 +156,39 @@ def plot_tail_coefficient(epsilon):
     plt.legend()
     plt.show()
 
+rho = 0.3
+sigma_1 = 1
+sigma_2 = 0.5
+L = 10
+N_marginal = 10000  # of 128
+N_joint = 10000  # of 48
+epsilon = 1e-4
+
+a = -L
+b = L
+a_1 = a_2 = a
+b_1 = b_2 = b
+
+# cov_matrix = [[sigma_1 ** 2, rho * sigma_1 * sigma_2],
+#               [rho * sigma_1 * sigma_2, sigma_2 ** 2]]
+gaussian_copula = GaussianCopula(corr=rho, k_dim=2, allow_singular=False)
+
+x_index = np.arange(N_marginal)
+y_index = np.arange(N_marginal)
+x_gridpoints = a + (b - a) / N_marginal * (x_index + 0.5)
+y_gridpoints = a + (b - a) / N_marginal * (y_index + 0.5)
+
+x_index_joint = np.arange(N_joint)
+y_index_joint = np.arange(N_joint)
+x_gridpoints_joint = a_1 + (b_1 - a_1) / N_joint * (x_index_joint + 0.5)
+y_gridpoints_joint = a_2 + (b_2 - a_2) / N_joint * (y_index_joint + 0.5)
+
 profiler = cProfile.Profile()
 profiler.enable()
-for alpha in [2.0, 1.8, 1.6, 1.4, 1.2, 1.0, 0.8]:
-# for alpha in [1.8]:
+for alpha in [2.0, 1.8, 1.6, 1.4, 1.2, 1.0, 0.8, 0.6, 0.4, 0.2]:
+# for alpha in []:
     print("")
     print(f"alpha = {alpha}")
-
-    rho = 0.3
-    sigma_1 = 1
-    sigma_2 = 0.5
-    L = 10
-    N_marginal = 10000  # of 128
-    N_joint = 10000  # of 48
-    epsilon = 1e-3
-
-    a = -L
-    b = L
-    a_1 = a_2 = a
-    b_1 = b_2 = b
-
-    # cov_matrix = [[sigma_1 ** 2, rho * sigma_1 * sigma_2],
-    #               [rho * sigma_1 * sigma_2, sigma_2 ** 2]]
-    gaussian_copula = GaussianCopula(corr=rho, k_dim=2, allow_singular=False)
-
-    x_index = np.arange(N_marginal)
-    y_index = np.arange(N_marginal)
-    x_gridpoints = a + (b - a) / N_marginal * (x_index + 0.5)
-    y_gridpoints = a + (b - a) / N_marginal * (y_index + 0.5)
-
-    x_index_joint = np.arange(N_joint)
-    y_index_joint = np.arange(N_joint)
-    x_gridpoints_joint = a_1 + (b_1 - a_1) / N_joint * (x_index_joint + 0.5)
-    y_gridpoints_joint = a_2 + (b_2 - a_2) / N_joint * (y_index_joint + 0.5)
 
     marginal_density_x_gridpoints = univariate_density_gridpoints(univariate_characteristic_function_1, N_marginal)
     marginal_density_y_gridpoints = univariate_density_gridpoints(univariate_characteristic_function_2, N_marginal)
@@ -239,7 +239,7 @@ for alpha in [2.0, 1.8, 1.6, 1.4, 1.2, 1.0, 0.8]:
 
     # contour_plot_COS(100, epsilon=0)
     # contour_plot_Gaussian(100, epsilon=0)
-    # print(f"double integral of copula density for alpha {alpha} is: {dblquad(lambda x, y: copula_density(x, y), 0, 1, 0, 1)[0]}")
+    # print(f"epsilon=1e-3: double integral of copula density for alpha {alpha} is: {dblquad(lambda x, y: copula_density(x, y), epsilon, 1-epsilon, epsilon, 1-epsilon)[0]}")
 
     # u = 0.95
     # print(f"upper tail coefficient = {upper_tail_coefficient(u, epsilon)}")
@@ -251,4 +251,3 @@ results.sort_stats('tottime').print_stats()
 # print("\n")
 #
 # results.print_callers('f_raise')
-
